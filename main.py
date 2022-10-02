@@ -38,11 +38,9 @@ class Vendor(Person):
         self.range = range
     
     def sell_to(self, customer, number_of_icecreams):
-        self.customer = customer
-        self.number_of_icecreams = number_of_icecreams
-        Vendor.location = Customer.location
-        Customer.debit(number_of_icecreams * Vendor.price)
-        Vendor.credit(number_of_icecreams * Vendor.price)
+        self.customer = customer.location
+        self.wallet.credit(number_of_icecreams * self.price)
+        customer.wallet.debit(number_of_icecreams * self.price)
         print(f"{number_of_icecreams} ice creams were sold")
 
 
@@ -54,32 +52,28 @@ class Customer(Person):
     
     
     def is_in_range(self, vendor):
-        self.vendor = vendor
-        if abs(self.location - Vendor.location) >= Vendor.range:
-            True
+        distance = vendor.location - self.location
+        if distance > vendor.range:
+            return True
             print("You are within range")
         else:
+            return False
             print("You are NOT within range")
 
     def have_enough_money (self, vendor, number_of_icecreams):
-        self.vendor = vendor
-        self.number_of_icecreams = number_of_icecreams
-        number_of_icecreams = self.wallet / Vendor.price
-        if number_of_icecreams >= 1:
-            True
+        if self.wallet.money >= vendor.price * number_of_icecreams:
+            return True
             print(f"You have enough money to buy {number_of_icecreams} icecream(s)")
         else:
+            return False
             print("You DON'T have enough money to buy icecream")
         
+        
     def request_icecream (self, vendor, number_of_icecreams):
-        self.number_of_icecreams = number_of_icecreams
-        self.vendor = vendor
-        number_of_icecreams = input("How many icecreams would you like to buy?: ")
-        if Customer.is_in_range and Customer.have_enough_money is True:
-            Vendor.sell_to(customer, number_of_icecreams)
-            print(f"A request to buy {number_of_icecreams} has been made")
-        else:
-            print("Your request cannot be made")
-
+        if self.is_in_range(vendor) and self.have_enough_money(
+            vendor, number_of_icecreams
+        ):
+            vendor.sell_to(self, number_of_icecreams)
+        
 
 customer = Customer("Abdallah", 3, 6)
