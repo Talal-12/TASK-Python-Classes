@@ -38,7 +38,7 @@ class Vendor(Person):
         self.range = range
     
     def sell_to(self, customer, number_of_icecreams):
-        self.customer = customer.location
+        self.move_to(customer.location)
         self.wallet.credit(number_of_icecreams * self.price)
         customer.wallet.debit(number_of_icecreams * self.price)
         print(f"{number_of_icecreams} ice creams were sold")
@@ -72,9 +72,7 @@ class Customer(Person):
         
         
     def request_icecream (self, vendor, number_of_icecreams):
-        if self.is_in_range(vendor) and self.have_enough_money(
-            vendor, number_of_icecreams
-        ):
+        if self.is_in_range(vendor) and self.have_enough_money(vendor, number_of_icecreams):
             vendor.sell_to(self, number_of_icecreams)
         
 
