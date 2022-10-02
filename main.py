@@ -2,7 +2,7 @@ from logging.config import _LoggerConfiguration
 
 
 class Wallet:
-    def __init__(self, money):
+    def __init__(self, money=0):
         self.money = money
 
     def credit(self, amount):
@@ -52,21 +52,23 @@ class Customer(Person):
     
     
     def is_in_range(self, vendor):
-        distance = vendor.location - self.location
-        if distance > vendor.range:
-            return True
+        distance = abs(vendor.location - self.location)
+        if distance >= vendor.range:
             print("You are within range")
+            return True
+            
         else:
-            return False
             print("You are NOT within range")
-
+            return False
+            
     def have_enough_money (self, vendor, number_of_icecreams):
         if self.wallet.money >= vendor.price * number_of_icecreams:
-            return True
             print(f"You have enough money to buy {number_of_icecreams} icecream(s)")
+            return True
+            
         else:
-            return False
             print("You DON'T have enough money to buy icecream")
+            return False
         
         
     def request_icecream (self, vendor, number_of_icecreams):
